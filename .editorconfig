@@ -1,0 +1,19 @@
+root = true
+
+[*]
+# Defaults for all filetypes
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+spelling_language = en-US
+charset = utf-8
+
+[*.{py,c,cpp,h,hpp,ini,toml,gd,sql,java,go}]
+# Be explicit for PL-specific indenting in case we change the default for some reason.
+indent_style = space
+indent_size = 4
+
+[*.{js,ts,mjs,mts,html,json,css,vue,jsx,tsx,ex,exs,lua,md}]
+# Be explicit for PL-specific indenting in case we change the default for some reason.
+indent_style = space
+indent_size = 2

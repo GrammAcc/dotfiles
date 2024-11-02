@@ -1,0 +1,74 @@
+"dmenu_run"
+	mod1 + p
+
+"clipmenu"
+	mod1 + shift + p
+
+"kitty"
+	mod1 + t
+
+"xterm"
+	mod1 + control + shift + t
+
+"doublecmd"
+	mod1 + f
+
+"firefox"
+	mod1 + w
+
+"torbrowser-launcher"
+	mod1 + shift + w
+
+"godot"
+	mod1 + g
+
+"blender"
+	mod1 + shift + g
+
+"/usr/bin/amixer -D pulse sset Master toggle"
+	m:0x8 + c:51
+	alt + backslash
+
+"/usr/bin/amixer -D pulse sset Master 5%+"
+	m:0x8 + c:21
+	alt + equal
+
+"/usr/bin/amixer -D pulse sset Master 5%-"
+	m:0x8 + c:20
+	alt + minus
+
+"mss -m 1 -o /home/zero/screenshots/screen-1_shot_$(date '+%Y-%m-%d_%H:%M:%S').png && mss -m 2 -o /home/zero/screenshots/screen-2_shot_$(date '+%Y-%m-%d_%H:%M:%S').png"
+	m:0x0 + c:107
+	Print
+
+# Start recording screencast gif.
+"byzanz-record --exec 'sleep 1000' -x 1920 -y 0 -w 1920 -h 1080 screencasts/screen-1_$(date '+%Y-%m-%d_%H:%M:%S').gif"
+	alt + r
+
+# Stop recording screencast gif.
+"killall sleep"
+	alt + q
+
+"pkill -x xbindkeys && xbindkeys -f ~/.xbindkeysrc-blender"
+	mod1 + k
+
+"pkill -x xbindkeys && xbindkeys -f ~/.xbindkeysrc"
+	mod1 + shift + k
+
+# Extra mouse button remapping for Blender viewport controls
+"xte 'keydown Shift_L'"
+    b:8
+"xte 'keydown Alt_L'"
+    b:9
+"xte 'keydown Shift_L'"
+    alt + b:8
+"xte 'keydown Alt_L'"
+    shift + b:9
+"xte 'keyup Shift_L'"
+    shift + b:8
+"xte 'keyup Alt_L'"
+    alt + b:9
+"xte 'keyup Shift_L'"
+    alt + shift + b:8
+"xte 'keyup Alt_L'"
+    alt + shift + b:9

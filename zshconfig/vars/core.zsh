@@ -1,4 +1,4 @@
-# Environemnt variables that can be changed at runtime with `source ~/.zshrc`
+# Environment variables that can be changed at runtime with `source ~/.zshrc`
 
 
 # Default prompt
@@ -15,3 +15,4 @@ EDITOR="nvim"
 VISUAL="nvim"
 GIT_EDITOR="nvim"
 SUDO_EDITOR="vim"
+BROWSER='firefox'

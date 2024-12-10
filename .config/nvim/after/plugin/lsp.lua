@@ -10,9 +10,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
       vim.lsp.buf.definition()
     end, opts)
     vim.keymap.set("n", "<leader>lk", function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set("n", "<leader>ee", function() vim.diagnostic.open_float() end, opts)
-    vim.keymap.set("n", "<leader>ei", function() vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set("n", "<leader>eu", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "<leader>lee", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "<leader>lei", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "<leader>leu", function() vim.diagnostic.goto_prev() end, opts)
     vim.keymap.set("n", "<leader>ls", function() vim.lsp.buf.workspace_symbol() end, opts)
     vim.keymap.set("n", "<leader>la", function() vim.lsp.buf.code_action() end, opts)
     vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.references() end, opts)
@@ -51,8 +51,7 @@ require("mason-lspconfig").setup({
     "prismals",
     "sqlls",
     "taplo",
-    "tsserver",
-    "tsserver",
+    "ts_ls",
     "vuels",
     "yamlls",
   },

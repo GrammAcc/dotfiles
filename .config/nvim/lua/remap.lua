@@ -3,10 +3,6 @@ local esc_key = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-vim.keymap.set("n", "<leader>ll", "<C-W><C-L>")
-vim.keymap.set("n", "<leader>kk", "<C-W><C-K>")
-vim.keymap.set("n", "<leader>jj", "<C-W><C-J>")
-vim.keymap.set("n", "<leader>hh", "<C-W><C-H>")
 vim.keymap.set({ "n", "v" }, "<leader>i", ">>")
 vim.keymap.set({ "n", "v" }, "<leader>u", "<<")
 vim.keymap.set("n", "<F5>", ":checktime <CR>")
@@ -18,6 +14,10 @@ vim.keymap.set("v", "<C-k>", ":'<,'>m'<-2 <CR> gv")
 vim.keymap.set("n", "<C-CR>", "i <CR><Esc>")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
 vim.keymap.set("v", "<leader>so", ":sort <CR>")
+vim.keymap.set("n", "<leader>sn", ":set number! <CR>")
+vim.keymap.set("n", "<leader>co", ":copen <CR>")
+vim.keymap.set("n", "<leader>ci", ":cclose <CR>")
+vim.keymap.set("n", "<leader>dd", ":Lexplore <CR>")
 
 -- Find/Replace Inside Visual Block
 vim.keymap.set("v", "<leader>r", function()

@@ -1,0 +1,11 @@
+local mongosh = require("mongoscripting")
+
+vim.keymap.set("v", "<leader>mr", mongosh.run_selection)
+vim.keymap.set("n", "<leader>mr", mongosh.run_buffer)
+vim.keymap.set("n", "<C-8>", mongosh.next_db)
+vim.keymap.set("n", "<C-7>", mongosh.prev_db)
+vim.keymap.set("n", "<C-S-8>", mongosh.next_uri)
+vim.keymap.set("n", "<C-S-7>", mongosh.prev_uri)
+vim.keymap.set({"v","n"}, "<leader>mt", mongosh.toggle_ui)
+vim.keymap.set({"v", "n", "i"}, "<leader>mep", mongosh.put_input)
+vim.keymap.set({"v", "n", "i"}, "<leader>mwp", mongosh.put_output)

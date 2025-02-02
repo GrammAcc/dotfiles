@@ -1,6 +1,9 @@
 local comment = require("Comment.api")
 
-vim.keymap.set("n", "<leader>n", function() comment.toggle.linewise() end)
+local esc_key = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
 
--- For some reason, the visual mode doesn't work unless we use lua via vimscript command.
-vim.keymap.set("v", "<leader>n", ":lua require('Comment.api').toggle.linewise('visual') <CR>")
+vim.keymap.set("n", "<leader>n", comment.toggle.linewise.current)
+vim.keymap.set("v", "<leader>n", function()
+  vim.api.nvim_feedkeys(esc_key, 'x', false)
+  comment.toggle.linewise(vim.fn.visualmode())
+end)

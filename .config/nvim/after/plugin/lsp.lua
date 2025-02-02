@@ -1,5 +1,6 @@
 local lspconfig = require("lspconfig")
 local intervention = require("intervention")
+local telescope = require("telescope.builtin")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
@@ -13,13 +14,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>lee", function() vim.diagnostic.open_float() end, opts)
     vim.keymap.set("n", "<leader>lei", function() vim.diagnostic.goto_next() end, opts)
     vim.keymap.set("n", "<leader>leu", function() vim.diagnostic.goto_prev() end, opts)
-    vim.keymap.set("n", "<leader>ls", function() vim.lsp.buf.workspace_symbol() end, opts)
+    vim.keymap.set("n", "<leader>ls", function() telescope.lsp_document_symbols({ symbol_width = 60 }) end, opts)
     vim.keymap.set("n", "<leader>la", function() vim.lsp.buf.code_action() end, opts)
     vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>ln", function() vim.lsp.buf.rename() end, opts)
-    vim.keymap.set("n", "<leader>lsg", function() vim.lsp.buf.signature_help() end, opts)
+    vim.keymap.set("n", "<leader>lsh", function() vim.lsp.buf.signature_help() end, opts)
     vim.keymap.set("n", "<leader>lss", ":ClangdSwitchSourceHeader<CR>", opts)
     vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
+    vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
+    vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
     vim.keymap.set({ "n", "v" }, "<leader>lw", function()
       local ft = vim.bo.filetype
       if ft == "javascript" or ft == "typescript" or ft == "html" then
@@ -32,7 +35,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end, opts)
   end,
 })
-
 
 local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason").setup({})
@@ -48,6 +50,7 @@ require("mason-lspconfig").setup({
     "ltex",
     "lua_ls",
     "marksman",
+    "lexical",
     "prismals",
     "sqlls",
     "taplo",
@@ -83,27 +86,6 @@ lspconfig.lua_ls.setup({
     }
   }
 })
-
--- Elixir lsp config.
-lspconfig.elixirls.setup({
-  cmd = { vim.fn.expand("~/elixir-ls/language_server.sh") },
-  capabilities = lsp_capabilities,
-  settings = {
-    elixirLS = {
-      -- elixirls correctly sets this variable at runtime, but
-      -- it still uses the default "test" env for finding deps, so
-      -- things like formatting libraries will need to be added to the
-      -- deps for the :test env in the Mix.exs. In practice, this
-      -- shouldn't be an issue since it's still not prod, but it's
-      -- really annoying.
-      -- I need to dig into the elixir lsp more to understand what I'm doing wrong here.
-      mixEnv = "dev",
-      dialyzerEnabled = false,
-      fetchDeps = false,
-    },
-  },
-})
-
 
 -- Python lsp config
 local venv_path = os.getenv("VIRTUAL_ENV")
@@ -159,7 +141,6 @@ lspconfig.pylsp.setup({
 -- Even though this uses the default setup, it has to be after the dynamic
 -- Mason setup above or the client won't attach. I don't know why.
 lspconfig.gdscript.setup({ capabilities = lsp_capabilities })
-
 
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }

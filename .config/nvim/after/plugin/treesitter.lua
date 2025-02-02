@@ -2,7 +2,6 @@ vim.opt.runtimepath:append("~/nvim-treesitter/parsers")
 
 require("nvim-treesitter.configs").setup({
   parser_intsall_dir = "~/nvim-treesitter/parsers",
-
   ensure_installed = {
     "awk",
     "c",
@@ -49,13 +48,9 @@ require("nvim-treesitter.configs").setup({
     "xml",
     "yaml",
   },
-
   sync_install = false,
-
   auto_install = true,
-
   ignore_install = {},
-
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,

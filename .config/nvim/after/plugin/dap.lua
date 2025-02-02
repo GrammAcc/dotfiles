@@ -22,7 +22,7 @@ dap.adapters['pwa-node'] = {
   port = '10101',
   executable = {
     command = "node",
-    args = { "${HOME}/vscode-js-debug/src/dapDebugServer.js", "10101" },
+    args = { vim.fn.expand("~/vscode-js-debug/src/dapDebugServer.js"), "10101" },
   },
 }
 

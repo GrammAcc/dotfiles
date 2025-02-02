@@ -1,0 +1,13 @@
+return {
+  "GrammAcc/mongoscripting.nvim",
+  opts = {
+    mongo_uris = {
+      "mongodb://mongo:mongo@localhost:27017",
+      "mongodb://localhost:27017",
+    },
+    mongo_dbs = {
+      "local",
+      "test",
+    },
+  },
+}

@@ -18,6 +18,10 @@ vim.keymap.set("n", "<leader>sn", ":set number! <CR>")
 vim.keymap.set("n", "<leader>co", ":copen <CR>")
 vim.keymap.set("n", "<leader>ci", ":cclose <CR>")
 vim.keymap.set("n", "<leader>dd", ":Lexplore <CR>")
+vim.keymap.set("n", "<leader>ff", function()
+  vim.fn.setreg("+", vim.fn.expand("%"))
+  vim.cmd(':normal "+p')
+end)
 
 -- Find/Replace Inside Visual Block
 vim.keymap.set("v", "<leader>r", function()

@@ -1,0 +1,69 @@
+[cursor]
+style = "Beam"
+
+[font]
+size = 11.0
+
+[font.bold]
+family = "Noto Sans Mono"
+style = "Bold"
+
+# I hate italics in my terminal.
+# Set it to regular bold.
+[font.bold_italic]
+family = "Noto Sans Mono"
+style = "Bold"
+
+# I hate italics in my terminal.
+# Set it to regular.
+[font.italic]
+family = "Noto Sans Mono"
+style = "Regular"
+
+[font.normal]
+family = "Noto Sans Mono"
+style = "Regular"
+
+[colors.primary]
+background = '#000000'
+foreground = '#dddddd'
+
+[colors.cursor]
+text = '#e0def4'
+cursor = '#524f67'
+
+[colors.vi_mode_cursor]
+text = '#e0def4'
+cursor = '#524f67'
+
+[colors.selection]
+text = '#e0def4'
+background = '#403d52'
+
+[colors.normal]
+# These are Kitty's default colors.
+# I like them for the terminal window.
+black = '#000000'
+red = '#cc0403'
+green = '#19cb00'
+yellow = '#cecb00'
+blue = '#0d73cc'
+magenta = '#cb1ed1'
+cyan = '#0dcdcd'
+white = '#dddddd'
+
+[colors.bright]
+# These are Kitty's default colors.
+# I like them for the terminal window.
+black = '#767676'
+red = '#f2201f'
+green = '#23fd00'
+yellow = '#fffd00'
+blue = '#1a8fff'
+magenta = '#fd28ff'
+cyan = '#14ffff'
+white = '#ffffff'
+
+[colors.hints]
+start = {foreground = '#dddddd', background = '#000000' }
+end = { foreground = '#dddddd', background = '#000000' }

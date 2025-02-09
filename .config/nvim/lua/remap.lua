@@ -3,6 +3,10 @@ local esc_key = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+local function paste_from_buffer(register)
+  vim.cmd(':normal "' .. register .. "p")
+end
+
 vim.keymap.set({ "n", "v" }, "<leader>i", ">>")
 vim.keymap.set({ "n", "v" }, "<leader>u", "<<")
 vim.keymap.set("n", "<F5>", ":checktime <CR>")
@@ -11,18 +15,12 @@ vim.keymap.set("n", "<C-j>", ":m+1 <CR>")
 vim.keymap.set("n", "<C-k>", ":m-2 <CR>")
 vim.keymap.set("v", "<C-j>", ":'<,'>m'>+1 <CR> gv")
 vim.keymap.set("v", "<C-k>", ":'<,'>m'<-2 <CR> gv")
-vim.keymap.set("n", "<C-CR>", "i <CR><Esc>")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-N>")
 vim.keymap.set("v", "<leader>so", ":sort <CR>")
 vim.keymap.set("n", "<leader>sn", ":set number! <CR>")
 vim.keymap.set("n", "<leader>co", ":copen <CR>")
 vim.keymap.set("n", "<leader>ci", ":cclose <CR>")
 vim.keymap.set("n", "<leader>dd", ":Explore <CR>")
-
-local function paste_from_buffer(register)
-  vim.cmd(':normal "' .. register .. "p")
-end
-
 vim.keymap.set("n", "<leader>ff", function()
   vim.fn.setreg("+", vim.fn.expand("%"))
   paste_from_buffer("+")

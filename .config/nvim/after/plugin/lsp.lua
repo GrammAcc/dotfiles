@@ -23,16 +23,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
     vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
     vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
-    vim.keymap.set({ "n", "v" }, "<leader>lw", function()
-      local ft = vim.bo.filetype
-      if ft == "javascript" or ft == "typescript" or ft == "html" then
-        local enter_key = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
-        vim.cmd("!npx prettier --write %")
-        vim.api.nvim_feedkeys(enter_key, "n", false)
-      else
-        vim.lsp.buf.format()
-      end
-    end, opts)
+    vim.keymap.set("n", "<leader>lw", require("conform").format)
+    vim.keymap.set("v", "<leader>lw", function()
+      require("conform").format({ async = false }, function ()
+        local escape_key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+        vim.api.nvim_feedkeys(escape_key, "n", false)
+      end)
+    end)
   end,
 })
 
@@ -42,15 +39,14 @@ require("mason-lspconfig").setup({
   ensure_installed = {
     "clangd",
     "cssls",
-    "eslint",
     "html",
     "jdtls",
     "jsonls",
     "lemminx",
+    "lexical",
     "ltex",
     "lua_ls",
     "marksman",
-    "lexical",
     "prismals",
     "sqlls",
     "taplo",
@@ -60,9 +56,14 @@ require("mason-lspconfig").setup({
   },
   handlers = {
     function(server_name)
-      lspconfig[server_name].setup({
-        capabilities = lsp_capabilities,
-      })
+      local exclude = {
+        eslint = true,
+      }
+      if not exclude[server_name] then
+        lspconfig[server_name].setup({
+          capabilities = lsp_capabilities,
+        })
+      end
     end,
   },
 })
@@ -135,6 +136,26 @@ lspconfig.pylsp.setup({
       }
     }
   },
+})
+
+-- Javascript/Typescript lsp config
+-- Common settings for JS and TS
+local ts_ls_settings = { preferences = { importModuleSpecifier = "project-relative" } }
+
+lspconfig.ts_ls.setup({
+  capabilities = lsp_capabilities,
+  javascript = ts_ls_settings,
+  typescript = ts_ls_settings,
+})
+
+-- Elixir lsp config.
+lspconfig.lexical.setup({
+  capabilities = lsp_capabilities,
+  cmd = { vim.fn.stdpath("data") .. "/mason/bin/lexical" },
+  root_dir = function(fname)
+    return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+  end,
+  filetypes = { "elixir", "eelixir", "heex" },
 })
 
 -- GDScript lsp config

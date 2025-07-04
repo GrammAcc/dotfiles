@@ -23,13 +23,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
     vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
     vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
-    vim.keymap.set("n", "<leader>lw", require("conform").format)
-    vim.keymap.set("v", "<leader>lw", function()
-      require("conform").format({ async = false }, function ()
-        local escape_key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
-        vim.api.nvim_feedkeys(escape_key, "n", false)
-      end)
-    end)
+    vim.keymap.set({"n","v"}, "<leader>lw", vim.lsp.buf.format)
   end,
 })
 
@@ -58,6 +52,9 @@ require("mason-lspconfig").setup({
     function(server_name)
       local exclude = {
         eslint = true,
+        nextls = true,
+        elixirls = false,
+        lexical = true,
       }
       if not exclude[server_name] then
         lspconfig[server_name].setup({
@@ -146,16 +143,6 @@ lspconfig.ts_ls.setup({
   capabilities = lsp_capabilities,
   javascript = ts_ls_settings,
   typescript = ts_ls_settings,
-})
-
--- Elixir lsp config.
-lspconfig.lexical.setup({
-  capabilities = lsp_capabilities,
-  cmd = { vim.fn.stdpath("data") .. "/mason/bin/lexical" },
-  root_dir = function(fname)
-    return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
-  end,
-  filetypes = { "elixir", "eelixir", "heex" },
 })
 
 -- GDScript lsp config

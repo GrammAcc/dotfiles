@@ -23,7 +23,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
     vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
     vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
-    vim.keymap.set({"n","v"}, "<leader>lw", vim.lsp.buf.format)
+    vim.keymap.set({"n","v"}, "<leader>lw", function ()
+      local prettier_filetypes = {
+        typescript = true,
+        javascript = true,
+        html = false,
+      }
+
+      if prettier_filetypes[vim.bo.filetype] then
+        local enter_key = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+        vim.cmd("!npx prettier --write %")
+        vim.api.nvim_feedkeys(enter_key, "n", false)
+      else
+        vim.lsp.buf.format()
+      end
+    end)
   end,
 })
 
@@ -136,13 +150,9 @@ lspconfig.pylsp.setup({
 })
 
 -- Javascript/Typescript lsp config
--- Common settings for JS and TS
-local ts_ls_settings = { preferences = { importModuleSpecifier = "project-relative" } }
-
 lspconfig.ts_ls.setup({
   capabilities = lsp_capabilities,
-  javascript = ts_ls_settings,
-  typescript = ts_ls_settings,
+  preferences = { importModuleSpecifierPreference = "project-relative" },
 })
 
 -- GDScript lsp config

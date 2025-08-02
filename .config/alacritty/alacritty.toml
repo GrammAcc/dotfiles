@@ -5,23 +5,23 @@ style = "Beam"
 size = 11.0
 
 [font.bold]
-family = "Noto Sans Mono"
+family = "SauceCodeProNerdFontMono"
 style = "Bold"
 
 # I hate italics in my terminal.
 # Set it to regular bold.
 [font.bold_italic]
-family = "Noto Sans Mono"
+family = "SauceCodeProNerdFontMono"
 style = "Bold"
 
 # I hate italics in my terminal.
 # Set it to regular.
 [font.italic]
-family = "Noto Sans Mono"
+family = "SauceCodeProNerdFontMono"
 style = "Regular"
 
 [font.normal]
-family = "Noto Sans Mono"
+family = "SauceCodeProNerdFontMono"
 style = "Regular"
 
 [colors.primary]

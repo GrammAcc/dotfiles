@@ -1,3 +1,5 @@
+local intervention = require("intervention")
+
 vim.g.netrw_banner = 0
 vim.g.netrw_browse_split = 0
 vim.g.netrw_altfile = 1
@@ -24,8 +26,9 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.keymap.set("n", "<leader>dd", function()
   if vim.bo.filetype == "netrw" then
-    vim.api.nvim_command("Rex")
+    intervention:recall()
   else
+    intervention:mark()
     vim.api.nvim_command("Ex")
   end
 end)

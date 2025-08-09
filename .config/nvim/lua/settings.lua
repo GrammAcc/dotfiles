@@ -1,9 +1,6 @@
 -- Show line numbers by default.
 vim.o.number = true
 
--- I'm too stupid to keep track of the jump list without this.
-vim.o.jumpoptions = "stack"
-
 -- Prevent neovim from clobbering the terminal cursor settings.
 -- See: https://github.com/neovim/neovim/issues/6005
 vim.api.nvim_create_autocmd("ExitPre", {

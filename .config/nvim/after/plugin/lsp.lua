@@ -1,15 +1,11 @@
 local lspconfig = require("lspconfig")
-local intervention = require("intervention")
 local telescope = require("telescope.builtin")
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
   callback = function(event)
     local opts = { buffer = event.buf }
-    vim.keymap.set("n", "<leader>lg", function()
-      intervention:mark()
-      vim.lsp.buf.definition()
-    end, opts)
+    vim.keymap.set("n", "<leader>lg", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "<leader>lk", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("n", "<leader>lee", function() vim.diagnostic.open_float() end, opts)
     vim.keymap.set("n", "<leader>lei", function() vim.diagnostic.goto_next() end, opts)
@@ -19,25 +15,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>ln", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("n", "<leader>lsh", function() vim.lsp.buf.signature_help() end, opts)
-    vim.keymap.set("n", "<leader>lss", ":ClangdSwitchSourceHeader<CR>", opts)
-    vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
-    vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
-    vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
-    vim.keymap.set({"n","v"}, "<leader>lw", function ()
-      local prettier_filetypes = {
-        typescript = true,
-        javascript = true,
-        html = false,
-      }
-
-      if prettier_filetypes[vim.bo.filetype] then
-        local enter_key = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
-        vim.cmd("!npx prettier --write %")
-        vim.api.nvim_feedkeys(enter_key, "n", false)
-      else
-        vim.lsp.buf.format()
-      end
-    end)
+    vim.keymap.set({"n","v"}, "<leader>lw", function() vim.lsp.buf.format() end)
   end,
 })
 
@@ -45,37 +23,7 @@ local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason").setup({})
 require("mason-lspconfig").setup({
   ensure_installed = {
-    "clangd",
-    "cssls",
-    "html",
-    "jdtls",
-    "jsonls",
-    "lemminx",
-    "lexical",
-    "ltex",
     "lua_ls",
-    "marksman",
-    "prismals",
-    "sqlls",
-    "taplo",
-    "ts_ls",
-    "vuels",
-    "yamlls",
-  },
-  handlers = {
-    function(server_name)
-      local exclude = {
-        eslint = true,
-        nextls = true,
-        elixirls = false,
-        lexical = true,
-      }
-      if not exclude[server_name] then
-        lspconfig[server_name].setup({
-          capabilities = lsp_capabilities,
-        })
-      end
-    end,
   },
 })
 
@@ -148,17 +96,6 @@ lspconfig.pylsp.setup({
     }
   },
 })
-
--- Javascript/Typescript lsp config
-lspconfig.ts_ls.setup({
-  capabilities = lsp_capabilities,
-  preferences = { importModuleSpecifierPreference = "project-relative" },
-})
-
--- GDScript lsp config
--- Even though this uses the default setup, it has to be after the dynamic
--- Mason setup above or the client won't attach. I don't know why.
-lspconfig.gdscript.setup({ capabilities = lsp_capabilities })
 
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }

@@ -7,4 +7,3 @@ vim.keymap.set("n", "<leader>t", function()
     intervention.toggle_term()
   end
 end)
-vim.keymap.set("n", "<leader>q", function() intervention:recall() end)

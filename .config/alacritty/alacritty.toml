@@ -67,3 +67,60 @@ white = '#ffffff'
 [colors.hints]
 start = {foreground = '#dddddd', background = '#000000' }
 end = { foreground = '#dddddd', background = '#000000' }
+
+
+# Reset Keybinds so they don't interfere with keybinds I've set in neovim or other apps.
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "Insert"
+mods = "Shift"
+action = "ReceiveChar"
+
+[[keyboard.bindings]]
+key = "Key0"
+mods = "Control"
+action = "ReceiveChar"
+
+[[keyboard.bindings]]
+key = "="
+mods = "Control"
+action = "ReceiveChar"
+
+[[keyboard.bindings]]
+key = "-"
+mods = "Control"
+action = "ReceiveChar"
+
+[[keyboard.bindings]]
+key = "+"
+mods = "Control|Shift"
+action = "IncreaseFontSize"
+
+[[keyboard.bindings]]
+key = "-"
+mods = "Control|Shift"
+action = "DecreaseFontSize"
+
+[[keyboard.bindings]]
+key = "_"
+mods = "Control|Shift"
+action = "DecreaseFontSize"
+
+[[keyboard.bindings]]
+key = "NumpadAdd"
+mods = "Control"
+action = "ReceiveChar"
+
+[[keyboard.bindings]]
+key = "NumpadSubtract"
+mods = "Control"
+action = "ReceiveChar"

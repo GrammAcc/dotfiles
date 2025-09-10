@@ -120,7 +120,7 @@ lspconfig.pylsp.setup({
       configurationSources = { "flake8" },
       plugins = {
         jedi_completion = {
-          enabled = true,
+          enabled = false,
           include_params = false,
           include_class_objects = false,
           include_function_objects = false,
@@ -130,7 +130,7 @@ lspconfig.pylsp.setup({
         jedi_definition = { enabled = true },
         jedi_hover = { enabled = true },
         jedi_references = { enabled = true },
-        jedi_signature_help = { enabled = true },
+        jedi_signature_help = { enabled = false },
         jedi_symbols = { enabled = true, all_scopes = true },
         flake8 = { enabled = true },
         isort = { enabled = true },
@@ -143,7 +143,8 @@ lspconfig.pylsp.setup({
         pydocstyle = { enabled = false },
         mccabe = { enabled = false },
         preload = { enabled = false },
-        rope_completion = { enabled = false }
+        rope_autoimport = { enabled = false },
+        rope_completion = { enabled = true }
       }
     }
   },

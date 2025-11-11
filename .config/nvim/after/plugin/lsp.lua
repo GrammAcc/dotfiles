@@ -1,10 +1,49 @@
-local lspconfig = require("lspconfig")
 local intervention = require("intervention")
 local telescope = require("telescope.builtin")
+
+local lsps_to_enable = {
+  "clangd",
+  "cssls",
+  "elixirls",
+  -- "expert",
+  "gdscript",
+  "html",
+  "jsonls",
+  -- "lexical",
+  "lua_ls",
+  "marksman",
+  "pylsp",
+  "sqlls",
+  "taplo",
+  "ts_ls",
+  "yamlls",
+}
+
+-- Don't preselect. Avoids accidental completion.
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
   callback = function(event)
+    local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
+    -- Trigger autocompletion on every keypress.
+    local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+    client.server_capabilities.completionProvider.triggerCharacters = chars
+
+    vim.lsp.completion.enable(true, client.id, event.buf, {
+      autotrigger = true,
+    })
+
+    -- Remap the built-in popup menu navigation to CTRL+j/CTRL+k to prevent needing to
+    -- spend half my salary on physical therapy for hand injuries.
+    -- Also use Tab for selecting first option quickly.
+    vim.cmd("inoremap <expr><Tab> pumvisible() ? '<C-n>' : '<Tab>'")
+    vim.cmd("inoremap <expr><C-j> pumvisible() ? '<C-n>' : '<C-j>'")
+    vim.cmd("inoremap <expr><C-k> pumvisible() ? '<C-p>' : '<C-k>'")
+
+    -- Remap the built-in gr* mappings since they require hitting both keys with the left hand, and
+    -- can't be rolled like an `lk` kind of binding. They also require reaching to start the
+    -- sequence since the g key isn't one of the resting keys.
     local opts = { buffer = event.buf }
     vim.keymap.set("n", "<leader>lg", function()
       intervention:mark()
@@ -20,10 +59,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<leader>ln", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("n", "<leader>lsh", function() vim.lsp.buf.signature_help() end, opts)
     vim.keymap.set("n", "<leader>lss", ":ClangdSwitchSourceHeader<CR>", opts)
-    vim.keymap.set("n", "<leader>lrs", ":LspRestart <CR>", opts)
-    vim.keymap.set("n", "<leader>lrq", ":LspStop <CR>", opts)
-    vim.keymap.set("n", "<leader>lro", ":LspStart <CR>", opts)
-    vim.keymap.set({"n","v"}, "<leader>lw", function ()
+    vim.keymap.set({ "n", "v" }, "<leader>lw", function()
       local prettier_filetypes = {
         typescript = true,
         javascript = true,
@@ -41,47 +77,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
-require("mason").setup({})
-require("mason-lspconfig").setup({
-  ensure_installed = {
-    "clangd",
-    "cssls",
-    "html",
-    "jdtls",
-    "jsonls",
-    "lemminx",
-    "lexical",
-    "ltex",
-    "lua_ls",
-    "marksman",
-    "prismals",
-    "sqlls",
-    "taplo",
-    "ts_ls",
-    "vuels",
-    "yamlls",
-  },
-  handlers = {
-    function(server_name)
-      local exclude = {
-        eslint = true,
-        nextls = true,
-        elixirls = false,
-        lexical = true,
-      }
-      if not exclude[server_name] then
-        lspconfig[server_name].setup({
-          capabilities = lsp_capabilities,
-        })
-      end
-    end,
-  },
-})
+require("mason").setup()
 
--- Lua lsp config.
-lspconfig.lua_ls.setup({
-  capabilities = lsp_capabilities,
+-- Lua
+vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
       runtime = {
@@ -99,7 +98,32 @@ lspconfig.lua_ls.setup({
   }
 })
 
--- Python lsp config
+
+-- Elixir
+
+-- Setup for all three elixir lsps are included here since they all break intermittently, but one of them will usually work.
+-- Eventually, expert should become stable, but for now, we have to play whack-a-server with the rotating crash conditions.
+
+-- vim.lsp.config('expert', {
+--   cmd = { 'expert', '--stdio' },
+--   root_markers = { 'mix.exs', '.git' },
+--   filetypes = { 'elixir', 'eelixir', 'heex' },
+-- })
+
+-- vim.lsp.config('lexical', {
+--   cmd = { 'lexical' },
+--   root_markers = { 'mix.exs', '.git' },
+--   filetypes = { 'elixir', 'eelixir', 'heex' },
+-- })
+
+vim.lsp.config('elixirls', {
+  cmd = { 'elixir-ls' },
+  root_markers = { 'mix.exs', '.git' },
+  filetypes = { 'elixir', 'eelixir', 'heex' },
+})
+
+
+-- Python
 local venv_path = os.getenv("VIRTUAL_ENV")
 local py_path = nil
 local mypy_enabled = false
@@ -113,19 +137,18 @@ else
 end
 
 -- Configure pylsp plugins.
-lspconfig.pylsp.setup({
-  capabilities = lsp_capabilities,
+vim.lsp.config("pylsp", {
   settings = {
     pylsp = {
       configurationSources = { "flake8" },
       plugins = {
         jedi_completion = {
-          enabled = false,
+          enabled = true,
           include_params = false,
           include_class_objects = false,
           include_function_objects = false,
           fuzzy = false,
-          eager = true,
+          eager = false,
         },
         jedi_definition = { enabled = true },
         jedi_hover = { enabled = true },
@@ -144,41 +167,20 @@ lspconfig.pylsp.setup({
         mccabe = { enabled = false },
         preload = { enabled = false },
         rope_autoimport = { enabled = false },
-        rope_completion = { enabled = true }
+        rope_completion = { enabled = false }
       }
     }
   },
 })
 
--- Javascript/Typescript lsp config
-lspconfig.ts_ls.setup({
-  capabilities = lsp_capabilities,
-  preferences = { importModuleSpecifierPreference = "project-relative" },
+
+-- Javascript/Typescript
+vim.lsp.config("ts_ls", {
+  typescript = { preferences = { importModuleSpecifierPreference = "project-relative" } },
+  javascript = { preferences = { importModuleSpecifierPreference = "project-relative" } },
 })
 
--- GDScript lsp config
--- Even though this uses the default setup, it has to be after the dynamic
--- Mason setup above or the client won't attach. I don't know why.
-lspconfig.gdscript.setup({ capabilities = lsp_capabilities })
 
-local cmp = require("cmp")
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-cmp.setup({
-  sources = {
-    { name = "path" },
-    { name = "nvim_lsp" },
-    { name = "nvim_lua" },
-  },
-  mapping = cmp.mapping.preset.insert({
-    ["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
-    ["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-    ["<enter>"] = cmp.mapping.confirm({ select = true }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-  }),
-  snippet = {
-    expand = function(args)
-      require("luasnip").lsp_expand(args.body)
-    end,
-  },
-})
+for _, server_name in ipairs(lsps_to_enable) do
+  vim.lsp.enable(server_name)
+end

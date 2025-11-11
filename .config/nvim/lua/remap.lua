@@ -9,6 +9,8 @@ local function paste_from_buffer(register)
   vim.cmd(':normal "' .. register .. "p")
 end
 
+vim.keymap.set("n", "<leader>n", ":norm gcc<CR>")
+vim.keymap.set("v", "<leader>n", "gc", { remap = true })
 vim.keymap.set({ "n", "v" }, "<leader>i", ">>")
 vim.keymap.set({ "n", "v" }, "<leader>u", "<<")
 vim.keymap.set("n", "<F5>", ":checktime <CR>")
